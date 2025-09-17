@@ -25,8 +25,10 @@ import { SmartwatchIntegration } from "./smartwatch-integration"
 import { OnboardingQuestionnaire } from "./onboarding-questionnaire"
 import { NutritionButton } from "./nutrition-button"
 import { WorkoutReport } from "./workout-report"
+import { WelcomePage } from "./welcome-page"
 
 export function HealthDashboard() {
+  const [showWelcome, setShowWelcome] = useState(true)
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false)
   const [currentView, setCurrentView] = useState<
     "dashboard" | "workout" | "nutrition" | "profile" | "smartwatch" | "report"
@@ -41,6 +43,10 @@ export function HealthDashboard() {
     console.log("[v0] Onboarding completed with data:", data)
     setHasCompletedOnboarding(true)
     // Here you would typically save the data to your backend or local storage
+  }
+
+  const handleWelcomeComplete = () => {
+    setShowWelcome(false)
   }
 
   const handleFeedbackSubmit = () => {
@@ -99,6 +105,10 @@ export function HealthDashboard() {
       default:
         return "bg-gray-500"
     }
+  }
+
+  if (showWelcome) {
+    return <WelcomePage onGetStarted={handleWelcomeComplete} />
   }
 
   if (!hasCompletedOnboarding) {
@@ -214,15 +224,15 @@ export function HealthDashboard() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h3 className="font-semibold text-foreground">Recommended Workout</h3>
-            <p className="text-sm text-muted-foreground">{healthMetrics.todayWorkout}</p>
+            <h3 className="font-semibold text-foreground">{healthMetrics.todayWorkout}</h3>
+            <p className="text-sm text-muted-foreground">Recommended Workout</p>
             <p className="text-xs text-muted-foreground mt-1">
               Based on your high recovery score, you're ready for intense training
             </p>
           </div>
           <div className="flex gap-2">
             <Button
-              className="flex-1 bg-primary text-black hover:bg-primary/90"
+              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
               onClick={() => setCurrentView("workout")}
             >
               Start Workout
@@ -234,7 +244,7 @@ export function HealthDashboard() {
         </CardContent>
       </Card>
 
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+      <Card className="bg-gradient-to-r from-secondary/10 to-primary/5 border-secondary/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Zap className="w-5 h-5 text-primary" />
@@ -244,35 +254,35 @@ export function HealthDashboard() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 gap-3">
-            <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+            <div className="flex items-center justify-between p-3 bg-card rounded-lg border border-border">
               <div className="flex-1">
                 <h4 className="font-semibold text-sm">Whey Protein Powder</h4>
                 <p className="text-xs text-muted-foreground">Perfect for muscle recovery</p>
                 <p className="text-sm font-bold text-primary mt-1">$29.99</p>
               </div>
-              <Button size="sm" className="bg-primary text-black hover:bg-primary/90">
+              <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 Buy Now
               </Button>
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+            <div className="flex items-center justify-between p-3 bg-card rounded-lg border border-border">
               <div className="flex-1">
                 <h4 className="font-semibold text-sm">Creatine Monohydrate</h4>
                 <p className="text-xs text-muted-foreground">Boost strength & power</p>
                 <p className="text-sm font-bold text-primary mt-1">$19.99</p>
               </div>
-              <Button size="sm" className="bg-primary text-black hover:bg-primary/90">
+              <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 Buy Now
               </Button>
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+            <div className="flex items-center justify-between p-3 bg-card rounded-lg border border-border">
               <div className="flex-1">
                 <h4 className="font-semibold text-sm">Multivitamin Complex</h4>
                 <p className="text-xs text-muted-foreground">Daily nutritional support</p>
                 <p className="text-sm font-bold text-primary mt-1">$24.99</p>
               </div>
-              <Button size="sm" className="bg-primary text-black hover:bg-primary/90">
+              <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                 Buy Now
               </Button>
             </div>
@@ -302,7 +312,7 @@ export function HealthDashboard() {
                 size="sm"
                 onClick={handleSendText}
                 disabled={!textInput.trim()}
-                className="bg-primary text-black hover:bg-primary/90"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 <Send className="w-4 h-4" />
               </Button>
@@ -328,7 +338,7 @@ export function HealthDashboard() {
             className={`w-14 h-14 rounded-full shadow-lg transition-all duration-200 ${
               isListening
                 ? "bg-red-500 hover:bg-red-600 animate-pulse text-white"
-                : "bg-primary hover:bg-primary/90 text-black"
+                : "bg-primary hover:bg-primary/90 text-primary-foreground"
             }`}
             size="icon"
           >
@@ -355,7 +365,7 @@ export function HealthDashboard() {
               <Button
                 onClick={handleFeedbackSubmit}
                 disabled={!feedbackText.trim()}
-                className="flex-1 bg-primary text-black hover:bg-primary/90"
+                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 Send Feedback
               </Button>

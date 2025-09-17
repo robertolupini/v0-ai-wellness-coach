@@ -72,6 +72,11 @@ export function ProfileSystem({ onBack }: { onBack: () => void }) {
     return (userProfile.weight / (heightInM * heightInM)).toFixed(1)
   }
 
+  const calculateGoalBMI = () => {
+    const heightInM = userProfile.height / 100
+    return (userProfile.targetWeight / (heightInM * heightInM)).toFixed(1)
+  }
+
   const getBMICategory = (bmi: number) => {
     if (bmi < 18.5) return { category: "Underweight", color: "text-blue-600" }
     if (bmi < 25) return { category: "Normal", color: "text-green-600" }
@@ -368,10 +373,20 @@ export function ProfileSystem({ onBack }: { onBack: () => void }) {
             </div>
           </div>
 
-          <div className="text-center p-3 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg">
-            <div className="text-lg font-bold">BMI: {calculateBMI()}</div>
-            <div className={`text-xs ${getBMICategory(Number.parseFloat(calculateBMI())).color}`}>
-              {getBMICategory(Number.parseFloat(calculateBMI())).category}
+          <div className="grid grid-cols-2 gap-2">
+            <div className="text-center p-3 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg">
+              <div className="text-lg font-bold">BMI: {calculateBMI()}</div>
+              <div className="text-xs text-muted-foreground mb-1">Current</div>
+              <div className={`text-xs ${getBMICategory(Number.parseFloat(calculateBMI())).color}`}>
+                {getBMICategory(Number.parseFloat(calculateBMI())).category}
+              </div>
+            </div>
+            <div className="text-center p-3 bg-gradient-to-r from-green-500/5 to-blue-500/5 rounded-lg">
+              <div className="text-lg font-bold">BMI: {calculateGoalBMI()}</div>
+              <div className="text-xs text-muted-foreground mb-1">Goal</div>
+              <div className={`text-xs ${getBMICategory(Number.parseFloat(calculateGoalBMI())).color}`}>
+                {getBMICategory(Number.parseFloat(calculateGoalBMI())).category}
+              </div>
             </div>
           </div>
         </CardContent>

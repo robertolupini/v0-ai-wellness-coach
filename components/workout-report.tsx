@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { ArrowLeft, TrendingUp, Target, AlertCircle, CheckCircle, Clock, Zap } from "lucide-react"
+import { HealthInfographic } from "./health-infographic"
 
 interface WorkoutReportProps {
   onBack: () => void
@@ -32,30 +33,48 @@ export function WorkoutReport({ onBack }: WorkoutReportProps) {
       priority: "High",
       reason: "Incomplete shoulder press sets suggest need for improvement",
       recommendation: "Add lighter shoulder isolation exercises",
-      color: "text-red-500",
-      bgColor: "bg-red-50",
+      color: "text-orange-500",
+      bgColor: "bg-orange-50",
     },
     {
       area: "Pull-up Endurance",
       priority: "Medium",
       reason: "Good form but could increase reps for better endurance",
       recommendation: "Add assisted pull-ups or negatives",
-      color: "text-yellow-600",
-      bgColor: "bg-yellow-50",
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
     },
     {
       area: "Recovery Time",
       priority: "Low",
       reason: "Rest periods were optimal for strength training",
       recommendation: "Maintain current rest intervals",
-      color: "text-green-600",
-      bgColor: "bg-green-50",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
     },
   ]
 
   const completedExercises = lastWorkout.exercises.filter((ex) => ex.completed).length
   const totalExercises = lastWorkout.exercises.length
   const completionRate = (completedExercises / totalExercises) * 100
+
+  const healthData = {
+    name: "Margarita V.",
+    age: 29,
+    gender: "Female",
+    height: 165,
+    currentWeight: 61.6,
+    targetWeight: 58,
+    currentBMI: 22.6,
+    targetBMI: 21.3,
+    bloodPressure: "118/76",
+    heartRate: 72,
+    dailySteps: 8900,
+    sleepHours: 7.1,
+    activityLevel: "Intermediate",
+    preferredWorkout: ["Yoga", "Running"],
+    dietaryPreference: "Vegetarian",
+  }
 
   return (
     <div className="p-4 max-w-md mx-auto space-y-6">
@@ -67,6 +86,11 @@ export function WorkoutReport({ onBack }: WorkoutReportProps) {
           <h1 className="text-2xl font-bold text-foreground">Workout Report</h1>
           <p className="text-sm text-muted-foreground">Analysis of your last session</p>
         </div>
+      </div>
+
+      <div>
+        <h2 className="text-lg font-semibold mb-4 text-foreground">Health Overview</h2>
+        <HealthInfographic data={healthData} />
       </div>
 
       {/* Workout Summary */}

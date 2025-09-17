@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Dumbbell, Clock, Target, Play, CheckCircle, ArrowLeft, Flame } from "lucide-react"
+import { WorkoutVideoPlayer } from "./workout-video-player"
 
 interface Exercise {
   id: string
@@ -34,6 +35,7 @@ export function WorkoutSystem({ onBack }: { onBack: () => void }) {
   const [workoutStarted, setWorkoutStarted] = useState(false)
   const [timer, setTimer] = useState(0)
   const [isResting, setIsResting] = useState(false)
+  const [showVideo, setShowVideo] = useState<string | null>(null)
 
   // Mock AI-generated workout plans based on recovery score
   const workoutPlans: WorkoutPlan[] = [
@@ -200,6 +202,7 @@ export function WorkoutSystem({ onBack }: { onBack: () => void }) {
             onClick={() => {
               setCurrentWorkout(null)
               setWorkoutStarted(false)
+              setShowVideo(null)
               onBack()
             }}
           >
@@ -212,6 +215,15 @@ export function WorkoutSystem({ onBack }: { onBack: () => void }) {
             </p>
           </div>
         </div>
+
+        {showVideo && (
+          <div className="space-y-4">
+            <WorkoutVideoPlayer exerciseName={showVideo} onClose={() => setShowVideo(null)} />
+            <Button variant="outline" onClick={() => setShowVideo(null)} className="w-full">
+              Close Video
+            </Button>
+          </div>
+        )}
 
         {/* Progress */}
         <Card>
@@ -255,6 +267,10 @@ export function WorkoutSystem({ onBack }: { onBack: () => void }) {
                     <Badge className={`${getDifficultyColor(exercise.difficulty)} text-white text-xs`}>
                       {exercise.difficulty}
                     </Badge>
+                    <Button size="sm" variant="outline" onClick={() => setShowVideo(exercise.name)} className="text-xs">
+                      <Play className="w-3 h-3 mr-1" />
+                      Video
+                    </Button>
                     {!exercise.completed && (
                       <Button size="sm" onClick={() => completeExercise(exercise.id)} className="text-xs">
                         Complete
@@ -280,6 +296,7 @@ export function WorkoutSystem({ onBack }: { onBack: () => void }) {
                 onClick={() => {
                   setCurrentWorkout(null)
                   setWorkoutStarted(false)
+                  setShowVideo(null)
                   onBack()
                 }}
               >

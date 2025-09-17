@@ -57,6 +57,15 @@ export function OnboardingQuestionnaire({ onComplete }: { onComplete: (data: Onb
     return null
   }
 
+  const calculateGoalBMI = () => {
+    if (formData.height && formData.goalWeight) {
+      const heightInM = Number.parseFloat(formData.height) / 100
+      const weight = Number.parseFloat(formData.goalWeight)
+      return (weight / (heightInM * heightInM)).toFixed(1)
+    }
+    return null
+  }
+
   const getBMICategory = (bmi: number) => {
     if (bmi < 18.5) return { category: "Underweight", color: "text-blue-600" }
     if (bmi < 25) return { category: "Normal", color: "text-green-600" }
@@ -190,11 +199,19 @@ export function OnboardingQuestionnaire({ onComplete }: { onComplete: (data: Onb
             </div>
 
             {/* BMI Display */}
-            {calculateBMI() && (
-              <div className="p-3 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg text-center">
-                <div className="text-lg font-bold">BMI: {calculateBMI()}</div>
-                <div className={`text-sm ${getBMICategory(Number.parseFloat(calculateBMI()!)).color}`}>
-                  {getBMICategory(Number.parseFloat(calculateBMI()!)).category}
+            {calculateBMI() && calculateGoalBMI() && (
+              <div className="grid grid-cols-2 gap-2">
+                <div className="p-3 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg text-center">
+                  <div className="text-lg font-bold">Current BMI: {calculateBMI()}</div>
+                  <div className={`text-sm ${getBMICategory(Number.parseFloat(calculateBMI()!)).color}`}>
+                    {getBMICategory(Number.parseFloat(calculateBMI()!)).category}
+                  </div>
+                </div>
+                <div className="p-3 bg-gradient-to-r from-green-500/5 to-blue-500/5 rounded-lg text-center">
+                  <div className="text-lg font-bold">Goal BMI: {calculateGoalBMI()}</div>
+                  <div className={`text-sm ${getBMICategory(Number.parseFloat(calculateGoalBMI()!)).color}`}>
+                    {getBMICategory(Number.parseFloat(calculateGoalBMI()!)).category}
+                  </div>
                 </div>
               </div>
             )}
